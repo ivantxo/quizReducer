@@ -2,6 +2,8 @@ import { useEffect, useReducer } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import StartScreen from "./StartScreen";
+import Loader from "./Loader";
+import Error from "./Error";
 
 const initialState = {
   questions: [],
@@ -19,13 +21,16 @@ function reducer(state, action) {
     case "dataReceived":
       return { ...state, status: "ready", questions: action.payload };
 
+    case "dataFailed":
+      return { ...state, status: "error" };
+
     default:
       throw new Error("Action unknown");
   }
 }
 
 function App() {
-  const [{ questions }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
   const numQuestions = questions.length;
 
@@ -33,17 +38,21 @@ function App() {
     fetch("http://localhost:8000/questions")
       .then((res) => res.json())
       .then((data) => dispatch({ type: "dataReceived", payload: data }))
-      .catch((error) => {
-        throw new Error("Error");
-      });
+      .catch((error) => dispatch({ type: "dataFailed" }));
   }, []);
 
   return (
     <div className="app">
-      <Header />
-      <Main>
-        <StartScreen numQuestions={numQuestions} />
-      </Main>
+      {status === "loading" && <Loader />}
+      {status === "error" && <Error />}
+      {status !== "loading" && status !== "error" && (
+        <>
+          <Header />
+          <Main>
+            <StartScreen numQuestions={numQuestions} />
+          </Main>
+        </>
+      )}
     </div>
   );
 }
