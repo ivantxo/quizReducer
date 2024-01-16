@@ -28,13 +28,16 @@ function reducer(state, action) {
     case "start":
       return { ...state, status: "active" };
 
+    case "newAnswer":
+      return { ...state, answer: action.payload };
+
     default:
       throw new Error("Action unknown");
   }
 }
 
 function App() {
-  const [{ questions, status, index }, dispatch] = useReducer(
+  const [{ questions, status, index, answer }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -59,7 +62,11 @@ function App() {
         )}
         {status === "active" && (
           <>
-            <Question question={questions[index]} />
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
           </>
         )}
       </Main>
