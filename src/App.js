@@ -43,16 +43,12 @@ function App() {
 
   return (
     <div className="app">
-      {status === "loading" && <Loader />}
-      {status === "error" && <Error />}
-      {status !== "loading" && status !== "error" && (
-        <>
-          <Header />
-          <Main>
-            <StartScreen numQuestions={numQuestions} />
-          </Main>
-        </>
-      )}
+      <Header />
+      <Main>
+        {status === "loading" && <Loader />}
+        {status === "error" && <Error />}
+        {status === "ready" && <StartScreen numQuestions={numQuestions} />}
+      </Main>
     </div>
   );
 }
