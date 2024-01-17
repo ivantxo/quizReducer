@@ -11,6 +11,17 @@ function NextButton({ answer, index, numQuestions, dispatch }) {
       </button>
     );
   }
+
+  if (index + 1 === numQuestions) {
+    return (
+      <button
+        className="btn btn-ui"
+        onClick={() => dispatch({ type: "finish" })}
+      >
+        Finish
+      </button>
+    );
+  }
 }
 
 export default NextButton;
