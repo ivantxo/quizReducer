@@ -68,6 +68,8 @@ function reducer(state, action) {
       return {
         ...state,
         status: "finished",
+        highScore:
+          state.points > state.highScore ? state.points : state.highScore,
       };
 
     case "restart":
@@ -75,6 +77,7 @@ function reducer(state, action) {
         ...initialState,
         questions: state.questions,
         status: "ready",
+        highScore: state.highScore,
       };
 
     case "tick":
@@ -91,7 +94,7 @@ function reducer(state, action) {
 
 function App() {
   const [
-    { questions, status, index, answer, points, secondsRemaining },
+    { questions, status, index, answer, points, secondsRemaining, highScore },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -143,6 +146,7 @@ function App() {
             points={points}
             maxPoints={maxPoints}
             dispatch={dispatch}
+            highScore={highScore}
           />
         )}
       </Main>
